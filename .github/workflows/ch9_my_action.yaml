@@ -1,0 +1,19 @@
+name: PART7 - CH3 - Custom Action
+on: workflow_dispatch
+jobs:
+  humancat-job:
+    runs-on: ubuntu-latest
+    name: A job to generate human name and cat name
+    steps:
+      - name: Humancat action
+        id: generate-humancat
+        uses: jihyungSong/humancat@v1.0
+        with:
+          human-name: 'Ryan Song'
+          cat-name: 'Haku'
+      - name: Get the output
+        run: |
+          echo "Generated human name is ${{ steps.generate-humancat.outputs.human-name }}."
+          echo "${{ steps.generate-humancat.outputs.human-name }} is ${{ steps.generate-humancat.outputs.human-age }} years old." 
+          echo "Generated cat name is ${{ steps.generate-humancat.outputs.cat-name }}."
+          echo "${{ steps.generate-humancat.outputs.cat-name }}'s condition is ${{ steps.generate-humancat.outputs.cat-status }} now."

@@ -1,0 +1,22 @@
+---
+name: PART3 - CH1 - Basic Sample # 워크 플로우 이름
+on: workflow_dispatch # 이벤트 트리거(workflow_dispatch => 사용자가 클릭을 통해 수동으로 실행)
+jobs:
+  build: # job1
+    runs-on: ubuntu-latest # 우분투 환경에서 실행
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build project
+        run: |
+          echo "Build Project"
+      - name: Run tests
+        run: |
+          echo "Run Test"
+  deploy: # job 2
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to production
+        run: |
+          echo "Deploying to production server"

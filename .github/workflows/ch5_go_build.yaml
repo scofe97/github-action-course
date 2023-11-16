@@ -1,0 +1,43 @@
+name: PART5 - CH4 - CI (Go)
+on: workflow_dispatch
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  build:
+    strategy:
+      matrix:
+        go-version: [1.14.x, 1.15.x, 1.16.x, 1.17.x]
+        platform: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Move Golang Sample code
+        run: |
+          mv build_sample/go/* ./
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Check linting
+        run: |
+          go fmt ./...
+          go vet ./...
+      - name: Run tests
+        run: |
+          go test *.go
+      - name: Build
+        run: |
+          go build -v ./...
+      - name: Setup AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.AWS_ASSUME_ROLE_ARN }}
+          role-duration-seconds: 3600
+      - name: make s3 folders each platform
+        run: |
+          aws s3api put-object --bucket ${{ vars.BUCKET_NAME }} --key go-${{ matrix.platform }}-${{ matrix.go-version }}/ --content-length 0
+      - name: Upload file to S3
+        run: |
+          aws s3 cp main s3://${{ vars.BUCKET_NAME }}/go-${{ matrix.platform }}-${{ matrix.go-version }}/
