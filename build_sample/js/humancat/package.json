@@ -1,5 +1,5 @@
 {
-  "name": "humancat",
+  "name": "bohyeon-humancat",
   "version": "0.0.8",
   "description": "GitHub Action Build Sample",
   "scripts": {
@@ -14,7 +14,7 @@
     "cat",
     "humancat"
   ],
-  "author": "bohyeon",
+  "author": "jihyungSong",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jihyungSong/github-action-course/issues"
